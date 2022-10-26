@@ -46,16 +46,23 @@ def randPath(m, num):
 
 def greedyPath(m, num):
     bestHouses = []
+    houses = []
     for i in range(len(bestHouses)):
-        p = []
-        x = random.randint(0,4)
-        y = random.randint(0,4)
-        p.append(m[x][y])
-        gen = m[x][y]
+        for j in range(5):
+            houses.qppend([m[i][j], [i, j]])
+    maxHval = 0
+    maxHcoord = [0,0]
+
+    for h in houses:
+        if h[0] >= maxHval:
+            maxHval = h[0]
+            maxHcoord = h[1]
+    bestHouses.append(houses.pop(maxHcoord))
+        
 
         
-        for i in range(num - 1):
-            return pVal, p
+    for i in range(num - 1):
+        return pVal, p
     
 def main():
     m = [[],[],[],[],[]]
