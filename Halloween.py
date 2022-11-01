@@ -43,27 +43,69 @@ def randPath(m, num):
             
         return pVal, p
 
-
 def greedyPath(m, num):
     bestHouses = []
     houses = []
-    for i in range(len(bestHouses)):
+    coords = []
+    for i in range(5):
         for j in range(5):
-            houses.qppend([m[i][j], [i, j]])
-    maxHval = 0
-    maxHcoord = [0,0]
+            houses.append(m[i][j])
+            coords.append([i,j])
 
-    for h in houses:
-        if h[0] >= maxHval:
-            maxHval = h[0]
-            maxHcoord = h[1]
-    bestHouses.append(houses.pop(maxHcoord))
-        
+    for i in range(25):
+        maxHval = 0
+        maxHcoord = [0,0]
+        for pos in range(len(houses)):
+            if houses[pos] > maxHval:
+                maxHval = houses[pos]
+                maxHcoord = coords[pos]
+        bestHouses.append(maxHcoord)
+        houses.remove(maxHval)
+        coords.remove(maxHcoord)
 
+    for i in range(len(bestHouses)):
+        p = []
+        start = bestHouses[i]
+        x = bestHouses[0][0]
+        y = bestHouses[0][1]
+        pVal = m[x][y]
         
-    for i in range(num - 1):
+            
+        for i in range(num - 1):
+            neighbors = [[x+1, y],[x-1, y],[x, y + 1],[x, y - 1]]
+            bad = []
+            for n in neighbors:
+                if n[0] > 4 or n[0] < 0:
+                    bad.append(n)
+                elif n[1] > 4 or n[1] < 0:
+                    bad.append(n)
+                if n in p:
+                    bad.append(n)
+            for b in bad:
+                neighbors.remove(b)
+
+            if len(neighbors) == 0:
+                break
+            
+            toBreak = False
+            for h in bestHouses:
+                if toBreak:
+                    break
+                for n in neighbors:
+                    if n == h:
+                        nextHouse = n
+                        toBreak = True
+                        break
+            p.append(nextHouse)
+            x = nextHouse[0]
+            y = nextHouse[1]
+            pVal = pVal + m[x][y]
+
+
         return pVal, p
-    
+    return 0, [[0,0]]
+
+
 def main():
     m = [[],[],[],[],[]]
     for l in m:
@@ -76,9 +118,9 @@ def main():
 
     num = int(input("How many houses?\n"))
 
-    #gen, p = greedyPath(m, num)
+    pVal, p = greedyPath(m, num)
 
-    pVal, p = randPath(m, num)
+    #pVal, p = randPath(m, num)
 
     total = 0
     for i in range(5):
@@ -87,13 +129,13 @@ def main():
 
     average  = total/25
 
-    pVal, p = randPath(m, num)
+    '''pVal, p = randPath(m, num)
     while (average > pVal/num):
         pVal, p = randPath(m, num)
 
     print(p)
     print("the average value in the path is: " + str(pVal/num))
-    print("the average value in the neighborhood is " + str(average))
+    print("the average value in the neighborhood is " + str(average))'''
         
 
     
